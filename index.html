@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nivaran Dx | Accessible Point-of-Care Infectious Disease Diagnostics</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Space Grotesk + Patrick Hand + Caveat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        parchment: '#FAF6EE',
+                        paper: '#FFFDF9',
+                        ink: '#1C1917',
+                        inkLight: '#44403C',
+                        brandGreen: '#4E8634',
+                        brandRed: '#E60000',
+                        brandGold: '#E09F1F',
+                    },
+                    fontFamily: {
+                        sans: ['"Space Grotesk"', 'sans-serif'],
+                        hand: ['"Patrick Hand"', 'cursive'],
+                        note: ['"Caveat"', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Hand-drawn paper texture background */
+        body {
+            background-color: #FAF6EE;
+            background-image: 
+                radial-gradient(#d6cfbe 0.75px, transparent 0.75px),
+                radial-gradient(#d6cfbe 0.75px, #FAF6EE 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            color: #1C1917;
+        }
+
+        /* Hand-sketched border and hard-ink drop shadow */
+        .sketch-box {
+            border: 2px solid #1C1917;
+            border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+            box-shadow: 4px 4px 0px #1C1917;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .sketch-box:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #1C1917;
+        }
+        .sketch-box-flat {
+            border: 2px solid #1C1917;
+            border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+            box-shadow: 3px 3px 0px #1C1917;
+        }
+        .sketch-btn {
+            border: 2px solid #1C1917;
+            border-radius: 255px 25px 225px 25px/25px 225px 25px 255px;
+            box-shadow: 3px 3px 0px #1C1917;
+            transition: all 0.1s ease;
+            cursor: pointer;
+        }
+        .sketch-btn:hover {
+            transform: translate(-1px, -1px);
+            box-shadow: 4px 4px 0px #1C1917;
+        }
+        .sketch-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #1C1917;
+        }
+
+        /* Handwritten step circled numbers */
+        .circle-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border: 2px solid #1C1917;
+            border-radius: 50% 48% 52% 49% / 49% 53% 47% 51%;
+            font-weight: bold;
+        }
+
+        /* Dropdown hover support on desktop */
+        .nav-dropdown:hover .nav-dropdown-menu {
+            display: block;
+        }
+    </style>
+</head>
+<body class="selection:bg-amber-200 selection:text-ink font-sans text-ink">
+
+    <!-- Top Google Sheets Live CMS Status Ribbon -->
+    <div class="border-b-2 border-ink bg-amber-100/85 px-4 py-1.5 text-xs sm:text-sm font-hand">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 bg-brandGreen text-white font-sans font-bold text-[10px] uppercase tracking-wider rounded-sm border border-ink">Nivaran Dx</span>
+                <span>Infectious Disease Point-of-Care Diagnostics • Incubated at BITS Pilani, Hyderabad</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span id="cms-status-pill" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-white border border-ink rounded-full text-xs font-sans font-semibold">
+                    <span id="cms-dot" class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                    <span id="cms-status-text">Syncing Google Sheet...</span>
+                </span>
+                <button onclick="openCmsModal()" class="underline font-bold text-stone-800 hover:text-brandRed text-xs" title="View Google Sheet tab template">
+                    [Sheet Template]
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 1. STICKY TITLE BAR WITH EXACT NAVIGATION HEADINGS & SUBHEADINGS -->
+    <header class="border-b-2 border-ink bg-[#FAF6EE]/95 backdrop-blur-xs sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Brand Logo (Uses company logo.png if present in GitHub repo, with exact SVG vector fallback) -->
+            <a href="#top" class="flex items-center space-x-2 group shrink-0" aria-label="Nivaran Dx Home">
+                <img src="company logo.png" alt="Nivaran Dx Logo" class="h-11 sm:h-12 w-auto object-contain" onerror="this.style.display='none'; document.getElementById('nivaran-svg-logo').style.display='block';">
+                
+                <!-- Exact Vector Replica of Uploaded Logo -->
+                <svg id="nivaran-svg-logo" style="display:none;" class="h-11 sm:h-12 w-auto" viewBox="0 0 460 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Bottom-Left Dynamic Red Swoosh -->
+                    <path d="M12 104C48 102 68 85 84 68C100 51 114 43 136 42C116 47 104 59 90 76C74 95 52 106 12 104Z" fill="#E60000"/>
+                    <!-- Top-Right Dynamic Golden-Amber Swoosh -->
+                    <path d="M448 8C412 10 392 27 376 44C360 61 346 69 324 70C344 65 356 53 370 36C386 17 408 6 448 8Z" fill="#E09F1F"/>
+                    <!-- Devanagari-inspired Top Shirorekha Bar over 'nivaran' -->
+                    <rect x="142" y="39" width="136" height="4.5" rx="1.5" fill="#4E8634"/>
+                    <!-- Dot/Matra accent over 'i' -->
+                    <path d="M161 28L168 35" stroke="#4E8634" stroke-width="4" stroke-linecap="round"/>
+                    <!-- Wordmark: nivaran dx -->
+                    <text x="143" y="68" fill="#4E8634" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="33" letter-spacing="-0.5">nivaran dx</text>
+                </svg>
+            </a>
+
+            <!-- Desktop Title Bar Navigation -->
+            <nav class="hidden lg:flex items-center space-x-5 text-sm font-bold text-ink">
+                
+                <!-- 1. About Us (with Dropdown for Who We Are, Our Inspiration, Our People) -->
+                <div class="relative nav-dropdown py-2">
+                    <a href="#about-us" class="inline-flex items-center gap-1 hover:text-brandGreen transition-colors">
+                        <span>About Us</span>
+                        <span class="text-xs">▾</span>
+                    </a>
+                    <div class="nav-dropdown-menu hidden absolute left-0 top-full w-52 bg-[#FFFDF9] border-2 border-ink rounded-xl shadow-[4px_4px_0_#1C1917] py-2 z-50">
+                        <a href="#who-we-are" class="block px-4 py-2 font-hand text-base hover:bg-amber-100">Who We Are</a>
+                        <a href="#our-inspiration" class="block px-4 py-2 font-hand text-base hover:bg-amber-100">Our Inspiration</a>
+                        <a href="#our-people" class="block px-4 py-2 font-hand text-base hover:bg-amber-100">Our People (Directors)</a>
+                    </div>
+                </div>
+
+                <!-- 2. Our Solutions -->
+                <a href="#our-solutions" class="hover:text-brandGreen transition-colors">Our Solutions</a>
+
+                <!-- 3. Knowledge Centre (with Dropdown for Publications & Patents) -->
+                <div class="relative nav-dropdown py-2">
+                    <a href="#knowledge-centre" class="inline-flex items-center gap-1 hover:text-brandGreen transition-colors">
+                        <span>Knowledge Centre</span>
+                        <span class="text-xs">▾</span>
+                    </a>
+                    <div class="nav-dropdown-menu hidden absolute left-0 top-full w-48 bg-[#FFFDF9] border-2 border-ink rounded-xl shadow-[4px_4px_0_#1C1917] py-2 z-50">
+                        <a href="#publications-sub" class="block px-4 py-2 font-hand text-base hover:bg-amber-100">Publications</a>
+                        <a href="#patents-sub" class="block px-4 py-2 font-hand text-base hover:bg-amber-100">Patents</a>
+                    </div>
+                </div>
+
+                <!-- 4. Careers -->
+                <a href="#careers" class="hover:text-brandGreen transition-colors">Careers</a>
+
+                <!-- 5. Media (with Dropdown for Events Attended & News About Our Startup) -->
+                <div class="relative nav-dropdown py-2">
+                    <a href="#media" class="inline-flex items-center gap-1 hover:text-brandGreen transition-colors">
+                        <span>Media</span>
+                        <span class="text-xs">▾</span>
+                    </a>
+                    <div class="nav-dropdown-menu hidden absolute left-0 top-full w-56 bg-[#FFFDF9] border-2 border-ink rounded-xl shadow-[4px_4px_0_#1C1917] py-2 z-50">
+                        <a href="#events-attended" class="block px-4 py-2 font-hand text-base hover:bg-amber-100">Events Attended</a>
+                        <a href="#startup-news" class="block px-4 py-2 font-hand text-base hover:bg-amber-100">News About Our Startup</a>
+                    </div>
+                </div>
+
+                <!-- 6. General Product Inquiry -->
+                <a href="#product-inquiry" class="sketch-btn px-4 py-2 bg-amber-300 hover:bg-amber-400 font-hand text-base font-bold text-ink">
+                    General Product Inquiry
+                </a>
+            </nav>
+
+            <!-- Mobile Hamburger Button -->
+            <button id="mobile-toggle" class="lg:hidden p-2 border-2 border-ink rounded-lg bg-amber-100" aria-label="Toggle Menu">
+                <svg class="w-6 h-6 text-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Drawer -->
+        <div id="mobile-menu" class="hidden lg:hidden border-t-2 border-ink bg-[#FAF6EE] px-6 py-4 space-y-3 text-sm font-bold">
+            <div>
+                <a href="#about-us" class="block text-brandGreen">About Us</a>
+                <div class="pl-4 mt-1 space-y-1 font-hand text-base text-stone-700">
+                    <a href="#who-we-are" class="block">• Who We Are</a>
+                    <a href="#our-inspiration" class="block">• Our Inspiration</a>
+                    <a href="#our-people" class="block">• Our People</a>
+                </div>
+            </div>
+            <a href="#our-solutions" class="block">Our Solutions</a>
+            <div>
+                <a href="#knowledge-centre" class="block text-brandGreen">Knowledge Centre</a>
+                <div class="pl-4 mt-1 space-y-1 font-hand text-base text-stone-700">
+                    <a href="#publications-sub" class="block">• Publications</a>
+                    <a href="#patents-sub" class="block">• Patents</a>
+                </div>
+            </div>
+            <a href="#careers" class="block">Careers</a>
+            <div>
+                <a href="#media" class="block text-brandGreen">Media</a>
+                <div class="pl-4 mt-1 space-y-1 font-hand text-base text-stone-700">
+                    <a href="#events-attended" class="block">• Events Attended</a>
+                    <a href="#startup-news" class="block">• News About Our Startup</a>
+                </div>
+            </div>
+            <a href="#product-inquiry" class="block text-center sketch-btn py-2.5 bg-amber-300 font-hand text-base font-bold mt-2">
+                General Product Inquiry
+            </a>
+        </div>
+    </header>
+
+    <main id="top">
+        <!-- HERO BANNER -->
+        <section class="pt-10 pb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="sketch-box bg-[#FFFDF9] p-6 sm:p-10 relative overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-8 space-y-4">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 border-2 border-ink rounded-full text-xs font-hand font-bold">
+                            <span class="w-2.5 h-2.5 rounded-full bg-brandGreen"></span>
+                            <span>Translational Infectious Disease Diagnostics</span>
+                        </div>
+                        <h1 id="hero-title" class="text-3xl sm:text-5xl font-extrabold text-ink tracking-tight leading-[1.12]">
+                            Bridging the Diagnostic Divide with <span class="underline decoration-wavy decoration-brandRed text-brandGreen">Accessible Point-of-Care</span> Solutions
+                        </h1>
+                        <p id="hero-tagline" class="text-lg sm:text-xl font-hand text-inkLight leading-relaxed max-w-3xl">
+                            Nivaran Dx develops rapid, semi-automated molecular and point-of-care diagnostic platforms designed to deliver accurate infectious disease detection from urban clinics to rural primary health centres.
+                        </p>
+                        <div class="flex flex-wrap gap-3 pt-2">
+                            <a href="#our-solutions" class="sketch-btn px-5 py-2.5 bg-brandGreen text-white font-bold text-sm sm:text-base">
+                                Explore Our Solutions ➔
+                            </a>
+                            <a href="#our-inspiration" class="sketch-btn px-5 py-2.5 bg-amber-200 hover:bg-amber-300 text-ink font-bold text-sm sm:text-base">
+                                Read Our Story
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Hand-drawn Diagnostic Mission Card -->
+                    <div class="lg:col-span-4">
+                        <div class="border-2 border-ink rounded-2xl bg-amber-50/80 p-5 space-y-3 rotate-1 shadow-[3px_3px_0_#1C1917]">
+                            <div class="font-hand text-xs font-bold uppercase text-brandRed tracking-wider">Lab-to-Last-Mile Focus</div>
+                            <div class="font-bold text-lg text-ink">Point-of-Care Molecular Impact</div>
+                            <ul class="space-y-2 font-hand text-base text-stone-700">
+                                <li class="flex items-start gap-2">
+                                    <span class="text-brandGreen font-bold">✓</span>
+                                    <span>Built for decentralized &amp; low-resource healthcare settings</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-brandGreen font-bold">✓</span>
+                                    <span>Simplified sample-to-answer workflows without heavy lab infrastructure</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <span class="text-brandGreen font-bold">✓</span>
+                                    <span>Early infectious disease screening for timely clinical intervention</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Molbio-Inspired Impact Metrics Bar -->
+                <div class="mt-8 pt-6 border-t-2 border-dashed border-stone-300 grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="border-2 border-ink rounded-xl bg-amber-50/60 p-3.5 text-center">
+                        <div class="text-xl sm:text-2xl font-extrabold text-brandGreen leading-snug">Facile &amp; rapid operation</div>
+                        <div class="font-hand text-sm sm:text-base text-stone-700">Quicker diagnostic</div>
+                    </div>
+                    <div class="border-2 border-ink rounded-xl bg-rose-50/60 p-3.5 text-center">
+                        <div class="text-2xl sm:text-3xl font-extrabold text-brandRed">Enzyme-Free</div>
+                        <div class="font-hand text-sm sm:text-base text-stone-700">Cold-Chain Independent</div>
+                    </div>
+                    <div class="border-2 border-ink rounded-xl bg-sky-50/60 p-3.5 text-center">
+                        <div class="text-2xl sm:text-3xl font-extrabold text-ink">Micro-Volume</div>
+                        <div class="font-hand text-sm sm:text-base text-stone-700">Minimal Sample Input</div>
+                    </div>
+                    <div class="border-2 border-ink rounded-xl bg-emerald-50/60 p-3.5 text-center">
+                        <div class="text-2xl sm:text-3xl font-extrabold text-brandGreen">Last-Mile PoC</div>
+                        <div class="font-hand text-sm sm:text-base text-stone-700">PHC &amp; Rural Clinic Ready</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================================= -->
+        <!-- ABOUT US (Who We Are + Our Inspiration + Our People)                    -->
+        <!-- ======================================================================= -->
+        <section id="about-us" class="py-12 border-t-2 border-ink bg-white/75">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
+                
+                <!-- Section Header -->
+                <div class="border-b-2 border-ink pb-3 flex flex-wrap items-end justify-between gap-2">
+                    <div>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-ink">About Us</h2>
+                    </div>
+                    <div class="flex flex-wrap gap-2 font-hand text-sm font-bold">
+                        <a href="#who-we-are" class="px-3 py-1 bg-amber-100 border border-ink rounded-full hover:bg-amber-200">Who We Are</a>
+                        <a href="#our-inspiration" class="px-3 py-1 bg-rose-100 border border-ink rounded-full hover:bg-rose-200">Our Inspiration</a>
+                        <a href="#our-people" class="px-3 py-1 bg-emerald-100 border border-ink rounded-full hover:bg-emerald-200">Our People</a>
+                    </div>
+                </div>
+
+                <!-- Subheading 1A: WHO WE ARE -->
+                <div id="who-we-are" class="scroll-mt-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <div class="lg:col-span-4">
+                        <div class="inline-flex items-center gap-2 mb-2">
+                            <span class="circle-badge bg-emerald-200 font-hand">A</span>
+                            <span class="font-hand text-base font-bold uppercase text-brandGreen">Identity &amp; Focus</span>
+                        </div>
+                        <h3 class="text-2xl sm:text-3xl font-extrabold text-ink">Who We Are</h3>
+                    </div>
+                    <div class="lg:col-span-8">
+                        <div class="sketch-box-flat bg-[#FFFDF9] p-6 sm:p-8 space-y-4">
+                            <p id="who-we-are-text" class="text-base sm:text-lg text-stone-800 leading-relaxed">
+                                <strong>Nivaran Dx</strong> is an infectious disease diagnostics group dedicated to engineering accessible, affordable, and field-deployable point-of-care (PoC) testing technologies. Operating at the intersection of translational nanobiotechnology, analytical chemistry, and biomedical instrumentation, our group focuses on solving critical bottlenecks in infectious disease detection—moving complex molecular and biomarker assays out of centralized reference laboratories and directly to the frontlines of patient care.
+                            </p>
+                            <p id="who-we-are-subtext" class="font-hand text-lg text-stone-600 leading-relaxed">
+                                By integrating simplified sample preparation, robust nanomaterial and molecular chemistry, and compact semi-automated hardware, we aim to empower frontline clinicians and community health workers with rapid, reliable diagnostic answers.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subheading 1B: OUR INSPIRATION (Emotional Story on Rural vs Urban Disparity in India) -->
+                <div id="our-inspiration" class="scroll-mt-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-6 border-t-2 border-dashed border-stone-300">
+                    <div class="lg:col-span-4">
+                        <div class="inline-flex items-center gap-2 mb-2">
+                            <span class="circle-badge bg-rose-200 font-hand">B</span>
+                            <span class="font-hand text-base font-bold uppercase text-brandRed">Why We Started</span>
+                        </div>
+                        <h3 class="text-2xl sm:text-3xl font-extrabold text-ink">Our Inspiration</h3>
+                        <p class="font-hand text-base text-stone-600 mt-2">
+                            Closing the diagnostic infrastructure gap between India’s metros and its rural heartland.
+                        </p>
+                    </div>
+                    <div class="lg:col-span-8">
+                        <div class="sketch-box bg-amber-50/75 p-6 sm:p-8 relative">
+                            <div class="font-note text-2xl sm:text-3xl font-bold text-brandRed mb-3">
+                                “A patient’s chance at early diagnosis should never depend on their pin code.”
+                            </div>
+                            <div id="our-inspiration-text" class="space-y-4 text-base text-stone-800 leading-relaxed">
+                                <p>
+                                    Across India, a stark tale of two healthcare worlds persists. In major metropolitan cities, tertiary hospitals are equipped with automated molecular laboratories capable of detecting viral infections within hours. Yet, just a few hours away in rural districts, small towns, and primary health centres, millions of families face an overwhelming diagnostic void—where basic confirmatory testing requires travelling long distances, losing days of daily wages, and waiting weeks for samples to be transported to distant city labs.
+                                </p>
+                                <p>
+                                    For silent, progressive infections like Hepatitis C and acute febrile illnesses, this delay is devastating. Too often, patients are lost to follow-up before their test results ever return, turning treatable infections into life-threatening complications. Witnessing this human cost firsthand inspired the founding of <strong>Nivaran Dx</strong> (from the Sanskrit <em>“Nivaran”</em>, meaning resolution and relief)—with a singular commitment to re-engineer high-precision diagnostics so they work reliably at the community clinic bedside, without cold chains, expensive thermal cyclers, or specialized lab infrastructure.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subheading 1C: OUR PEOPLE (All 3 Directors + Editable Scholar/Website/Photo slots) -->
+                <div id="our-people" class="scroll-mt-24 pt-6 border-t-2 border-dashed border-stone-300">
+                    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-6 gap-2">
+                        <div>
+                            <div class="inline-flex items-center gap-2 mb-2">
+                                <span class="circle-badge bg-emerald-200 font-hand">C</span>
+                                <span class="font-hand text-base font-bold uppercase text-brandGreen">Leadership &amp; Founding Directors</span>
+                            </div>
+                            <h3 class="text-2xl sm:text-3xl font-extrabold text-ink">Our People</h3>
+                        </div>
+                        <span class="font-hand text-sm text-stone-600">Editable via `People` sheet tab (Scholar &amp; Website links)</span>
+                    </div>
+
+                    <!-- Directors Grid (Populated via JS / Google Sheet) -->
+                    <div id="people-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Dynamically rendered for Prof. Jayati Ray Dutta, Prof. Ramakrishnan Ganesan, Mr. Debarun Paul -->
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ======================================================================= -->
+        <!-- OUR SOLUTIONS (Semi-Automated PoC for Early HCV Detection)              -->
+        <!-- ======================================================================= -->
+        <section id="our-solutions" class="py-14 border-t-2 border-ink">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="border-b-2 border-ink pb-3 mb-8 flex flex-wrap items-end justify-between gap-2">
+                    <div>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-ink">Our Solutions</h2>
+                    </div>
+                    <span class="font-hand text-sm text-stone-600">Synced with `Solutions` sheet tab</span>
+                </div>
+
+                <!-- Primary Flagship Platform Card -->
+                <div class="sketch-box bg-[#FFFDF9] p-6 sm:p-10">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                        
+                        <!-- Left 6 Cols: Description & Modular Workflow -->
+                        <div class="lg:col-span-6 space-y-5">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 bg-rose-100 border border-ink rounded-full text-xs font-hand font-bold text-brandRed">
+                                <span>HEPATITIS C VIRUS (HCV) • EARLY POINT-OF-CARE SCREENING</span>
+                            </div>
+                            <h3 id="sol-title" class="text-2xl sm:text-3xl font-extrabold text-ink leading-tight">
+                                Semi-Automated Point-of-Care (PoC) Platform for Early HCV Detection
+                            </h3>
+                            <p id="sol-desc" class="text-base text-stone-700 leading-relaxed">
+                                Inspired by decentralized point-of-care molecular diagnostics, our flagship platform is a compact, semi-automated device engineered for rapid, early detection of Hepatitis C Virus (HCV). Designed to bridge the gap between rapid antibody screening and centralized RT-PCR confirmation, the system streamlines sample processing and optical readout into an intuitive, low-cost workflow suitable for district hospitals and rural primary health centres.
+                            </p>
+
+                            <!-- 3-Step Hand-Sketched Workflow Diagram -->
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                                <div class="border-2 border-ink rounded-xl p-3.5 bg-amber-50/70">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="circle-badge text-xs bg-amber-200">1</span>
+                                        <span class="font-bold text-sm">Sample Input</span>
+                                    </div>
+                                    <p id="sol-step1" class="font-hand text-sm text-stone-600">Micro-volume patient sample loaded into disposable reaction cartridge/tube.</p>
+                                </div>
+                                <div class="border-2 border-ink rounded-xl p-3.5 bg-sky-50/70">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="circle-badge text-xs bg-sky-200">2</span>
+                                        <span class="font-bold text-sm">Semi-Automated Assay</span>
+                                    </div>
+                                    <p id="sol-step2" class="font-hand text-sm text-stone-600">Controlled onboard processing without bulky PCR thermal cyclers.</p>
+                                </div>
+                                <div class="border-2 border-ink rounded-xl p-3.5 bg-emerald-50/70">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="circle-badge text-xs bg-emerald-200">3</span>
+                                        <span class="font-bold text-sm">Rapid Readout</span>
+                                    </div>
+                                    <p id="sol-step3" class="font-hand text-sm text-stone-600">Clear, objective result enabling same-visit clinical linkage to care.</p>
+                                </div>
+                            </div>
+
+                            <div class="pt-2 flex flex-wrap gap-3">
+                                <a href="#product-inquiry" class="sketch-btn px-5 py-2.5 bg-brandGreen text-white font-bold text-sm">
+                                    Request Technical Specifications / Updates ➔
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Right 6 Cols: Adaptive Device & Assay Schematic Gallery (1 Photo by default, auto-expands to 2 or 3 when added in Sheet) -->
+                        <div class="lg:col-span-6">
+                            <div class="border-2 border-ink rounded-2xl bg-[#FCFAF2] p-4 sm:p-5 shadow-[3px_3px_0_#1C1917]">
+                                <div class="flex items-center justify-between border-b border-stone-300 pb-2 mb-4">
+                                    <span class="font-hand text-sm font-bold uppercase text-stone-700">Device &amp; Assay Schematic</span>
+                                    <span id="sol-status-badge" class="px-2.5 py-0.5 bg-emerald-200 border border-ink rounded-full font-hand text-xs font-bold">Prototype Ready</span>
+                                </div>
+
+                                <!-- Adaptive Gallery Container: Displays 1 clean full-width frame when 1 photo is provided, or expands to 2-3 frames when more URLs are added -->
+                                <div id="sol-gallery-grid" class="grid grid-cols-1 gap-4">
+                                    <div class="flex flex-col">
+                                        <div id="sol-photo-1" class="min-h-[260px] w-full rounded-xl border-2 border-dashed border-stone-400 bg-white flex flex-col items-center justify-center p-4 text-center overflow-hidden">
+                                            <svg class="w-16 h-16 text-brandGreen mb-2" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.5">
+                                                <rect x="20" y="18" width="60" height="64" rx="10" fill="#FAF6EE" stroke="#1C1917"/>
+                                                <rect x="30" y="28" width="40" height="22" rx="4" fill="#FEF3C7" stroke="#1C1917"/>
+                                                <circle cx="38" cy="64" r="6" fill="#FDA4AF" stroke="#1C1917"/>
+                                                <circle cx="56" cy="64" r="6" fill="#86EFAC" stroke="#1C1917"/>
+                                            </svg>
+                                            <span class="font-hand text-base font-bold text-ink">Device &amp; Assay Schematic Frame</span>
+                                            <span class="font-hand text-xs text-stone-500 mt-0.5">Add `Photo_1_URL` (or `Figure_URL`) in the `Solutions` sheet tab</span>
+                                        </div>
+                                        <span id="sol-caption-1" class="font-hand text-sm text-center text-stone-700 font-bold mt-2">Semi-Automated PoC Device &amp; Assay Schematic</span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 pt-2.5 border-t border-stone-200 flex flex-wrap justify-between gap-2 font-hand text-xs text-stone-600">
+                                    <span>Target: <strong id="sol-target" class="text-ink">Early HCV Detection</strong></span>
+                                    <span>Format: <strong id="sol-format" class="text-ink">Semi-Automated PoC</strong></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================================= -->
+        <!-- KNOWLEDGE CENTRE (Subheadings: Publications & Patents)                  -->
+        <!-- ======================================================================= -->
+        <section id="knowledge-centre" class="py-14 bg-white/80 border-t-2 border-ink">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="border-b-2 border-ink pb-3 mb-10 flex flex-wrap items-end justify-between gap-2">
+                    <div>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-ink">Knowledge Centre</h2>
+                    </div>
+                    <div class="flex gap-2 font-hand text-sm font-bold">
+                        <a href="#publications-sub" class="px-3 py-1 bg-amber-100 border border-ink rounded-full hover:bg-amber-200">Publications</a>
+                        <a href="#patents-sub" class="px-3 py-1 bg-rose-100 border border-ink rounded-full hover:bg-rose-200">Patents</a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                    
+                    <!-- Subheading 3A: PUBLICATIONS -->
+                    <div id="publications-sub" class="scroll-mt-24 lg:col-span-7 space-y-5">
+                        <div class="flex items-center justify-between border-b-2 border-dashed border-stone-300 pb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="circle-badge bg-amber-200 font-hand text-sm">1</span>
+                                <h3 class="text-2xl font-extrabold text-ink">Publications</h3>
+                            </div>
+                            <span class="font-hand text-xs text-stone-500">Synced with `Publications` tab</span>
+                        </div>
+
+                        <div id="publications-list" class="space-y-4">
+                            <!-- Dynamically populated from Google Sheet `Publications` tab -->
+                        </div>
+                    </div>
+
+                    <!-- Subheading 3B: PATENTS -->
+                    <div id="patents-sub" class="scroll-mt-24 lg:col-span-5 space-y-5">
+                        <div class="flex items-center justify-between border-b-2 border-dashed border-stone-300 pb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="circle-badge bg-rose-200 font-hand text-sm">2</span>
+                                <h3 class="text-2xl font-extrabold text-ink">Patents</h3>
+                            </div>
+                            <span class="font-hand text-xs text-stone-500">Synced with `Patents` tab</span>
+                        </div>
+
+                        <div id="patents-list" class="space-y-4">
+                            <!-- Dynamically populated from Google Sheet `Patents` tab -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================================= -->
+        <!-- CAREERS (Blank/Clean State Until Positions Added in Sheet)              -->
+        <!-- ======================================================================= -->
+        <section id="careers" class="py-14 border-t-2 border-ink bg-amber-50/50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="border-b-2 border-ink pb-3 mb-8 flex flex-wrap items-end justify-between gap-2">
+                    <div>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-ink">Careers</h2>
+                    </div>
+                    <span class="font-hand text-sm text-stone-600">Synced with `Careers` sheet tab</span>
+                </div>
+
+                <!-- Dynamic Careers Container: Shows clean blank/no-openings board by default, auto-renders job cards if rows are added to `Careers` tab -->
+                <div id="careers-container">
+                    <div class="sketch-box-flat bg-[#FFFDF9] p-8 sm:p-12 text-center max-w-3xl mx-auto">
+                        <div class="w-12 h-12 rounded-full bg-amber-100 border-2 border-ink flex items-center justify-center mx-auto mb-3 font-hand text-xl font-bold">
+                            📋
+                        </div>
+                        <h3 class="text-xl font-bold text-ink">No Open Positions Listed Right Now</h3>
+                        <p class="font-hand text-lg text-stone-600 mt-1">
+                            We do not have active job postings at this moment. Future openings in assay development, microfluidics, and clinical validation will appear here automatically.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================================= -->
+        <!-- MEDIA (Subheadings: Events Attended & News About Our Startup)           -->
+        <!-- ======================================================================= -->
+        <section id="media" class="py-14 bg-white/80 border-t-2 border-ink">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="border-b-2 border-ink pb-3 mb-10 flex flex-wrap items-end justify-between gap-2">
+                    <div>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-ink">Media</h2>
+                    </div>
+                    <div class="flex gap-2 font-hand text-sm font-bold">
+                        <a href="#events-attended" class="px-3 py-1 bg-sky-100 border border-ink rounded-full hover:bg-sky-200">Events Attended</a>
+                        <a href="#startup-news" class="px-3 py-1 bg-amber-100 border border-ink rounded-full hover:bg-amber-200">News About Our Startup</a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                    
+                    <!-- Subheading 5A: EVENTS ATTENDED -->
+                    <div id="events-attended" class="scroll-mt-24 lg:col-span-6 space-y-5">
+                        <div class="flex items-center justify-between border-b-2 border-dashed border-stone-300 pb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="circle-badge bg-sky-200 font-hand text-sm">1</span>
+                                <h3 class="text-2xl font-extrabold text-ink">Events Attended</h3>
+                            </div>
+                            <span class="font-hand text-xs text-stone-500">Synced with `Media_Events` tab</span>
+                        </div>
+
+                        <div id="events-list" class="space-y-4">
+                            <!-- Dynamically populated from Google Sheet `Media_Events` tab -->
+                        </div>
+                    </div>
+
+                    <!-- Subheading 5B: NEWS ABOUT OUR STARTUP -->
+                    <div id="startup-news" class="scroll-mt-24 lg:col-span-6 space-y-5">
+                        <div class="flex items-center justify-between border-b-2 border-dashed border-stone-300 pb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="circle-badge bg-amber-200 font-hand text-sm">2</span>
+                                <h3 class="text-2xl font-extrabold text-ink">News About Our Startup</h3>
+                            </div>
+                            <span class="font-hand text-xs text-stone-500">Synced with `Media_News` tab</span>
+                        </div>
+
+                        <div id="news-list" class="space-y-4">
+                            <!-- Dynamically populated from Google Sheet `Media_News` tab -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================================= -->
+        <!-- GENERAL PRODUCT INQUIRY (Product Updates & Inquiries)                   -->
+        <!-- ======================================================================= -->
+        <section id="product-inquiry" class="py-14 bg-amber-100/55 border-t-2 border-ink">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="border-b-2 border-ink pb-3 mb-8">
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-ink">General Product Inquiry</h2>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    
+                    <!-- Left 5 Columns: Information & Direct Contact -->
+                    <div class="lg:col-span-5 space-y-5">
+                        <p class="font-hand text-xl text-stone-700 leading-relaxed">
+                            Interested in receiving product updates on our semi-automated HCV point-of-care platform, clinical evaluation pilots, or distribution partnerships? Leave your details and our team will keep you updated.
+                        </p>
+
+                        <div class="sketch-box-flat bg-[#FFFDF9] p-5 space-y-4">
+                            <div>
+                                <div class="font-hand text-xs font-bold uppercase text-stone-500">Registered Office &amp; Lab</div>
+                                <p id="contact-location" class="font-bold text-sm text-ink mt-0.5">
+                                    BITS Pilani, Hyderabad Campus, Jawahar Nagar, Kapra Mandal, Hyderabad, Telangana 500078, India
+                                </p>
+                            </div>
+
+                            <div class="pt-3 border-t border-dashed border-stone-300">
+                                <div class="font-hand text-xs font-bold uppercase text-stone-500">Direct Inquiry Email</div>
+                                <div class="flex items-center justify-between gap-2 mt-1">
+                                    <a href="mailto:nivarandx@gmail.com" id="contact-email-display" class="font-mono text-sm font-bold text-brandGreen underline hover:text-brandRed">nivarandx@gmail.com</a>
+                                    <button onclick="copyContactEmail()" class="sketch-btn px-3 py-1 bg-amber-200 hover:bg-amber-300 font-hand text-xs font-bold">
+                                        📋 Copy Email
+                                    </button>
+                                </div>
+                                <p id="copy-feedback" class="hidden font-hand text-xs text-emerald-700 font-bold mt-1">✓ Copied nivarandx@gmail.com to clipboard!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right 7 Columns: Product Updates & Inquiry Form -->
+                    <div class="lg:col-span-7">
+                        <div class="sketch-box bg-[#FFFDF9] p-6 sm:p-8">
+                            <h3 class="text-xl font-extrabold text-ink mb-1">Register for Product Updates &amp; Inquiries</h3>
+                            <p class="font-hand text-base text-stone-600 mb-5">Fill in your details below to receive product milestones, technical brochures, or schedule a discussion.</p>
+
+                            <form id="inquiry-form" onsubmit="handleInquirySubmit(event)" class="space-y-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="inq-name" class="block font-hand font-bold text-base text-ink mb-1">Full Name *</label>
+                                        <input type="text" id="inq-name" required placeholder="Dr. / Mr. / Ms. Full Name" class="w-full px-3.5 py-2.5 border-2 border-ink rounded-lg font-sans text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 bg-amber-50/40">
+                                    </div>
+                                    <div>
+                                        <label for="inq-email" class="block font-hand font-bold text-base text-ink mb-1">Email Address *</label>
+                                        <input type="email" id="inq-email" required placeholder="name@organization.com" class="w-full px-3.5 py-2.5 border-2 border-ink rounded-lg font-sans text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 bg-amber-50/40">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="inq-org" class="block font-hand font-bold text-base text-ink mb-1">Hospital / Organization / Clinic</label>
+                                        <input type="text" id="inq-org" placeholder="Institution or Company Name" class="w-full px-3.5 py-2.5 border-2 border-ink rounded-lg font-sans text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 bg-amber-50/40">
+                                    </div>
+                                    <div>
+                                        <label for="inq-interest" class="block font-hand font-bold text-base text-ink mb-1">Inquiry / Update Preference</label>
+                                        <select id="inq-interest" class="w-full px-3.5 py-2.5 border-2 border-ink rounded-lg font-sans text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 bg-amber-50/40">
+                                            <option value="HCV PoC Product Updates">Early HCV PoC Product Updates</option>
+                                            <option value="Clinical Collaboration">Clinical Validation / Hospital Pilot</option>
+                                            <option value="Distribution & Procurement">Distribution &amp; Healthcare Procurement</option>
+                                            <option value="General Product Newsletter">General Product Newsletter</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="inq-notes" class="block font-hand font-bold text-base text-ink mb-1">Message / Specific Requirements</label>
+                                    <textarea id="inq-notes" rows="3" placeholder="Share any specific questions about our HCV point-of-care system or diagnostic pipeline..." class="w-full px-3.5 py-2.5 border-2 border-ink rounded-lg font-sans text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 bg-amber-50/40"></textarea>
+                                </div>
+
+                                <div class="flex items-center gap-2">
+                                    <input type="checkbox" id="inq-subscribe" checked class="w-4 h-4 accent-brandGreen border-2 border-ink rounded">
+                                    <label for="inq-subscribe" class="font-hand text-base text-stone-700">Keep me updated on new Nivaran Dx product releases and clinical milestones.</label>
+                                </div>
+
+                                <button type="submit" class="sketch-btn w-full py-3.5 bg-brandGreen hover:opacity-95 text-white font-bold text-base tracking-wide flex items-center justify-center gap-2">
+                                    <span>Submit Inquiry &amp; Subscribe for Updates</span>
+                                    <span class="font-hand text-xl">➔</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t-2 border-ink bg-[#FAF6EE] py-10 text-stone-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+                <svg class="h-10 w-auto shrink-0" viewBox="0 0 460 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 104C48 102 68 85 84 68C100 51 114 43 136 42C116 47 104 59 90 76C74 95 52 106 12 104Z" fill="#E60000"/>
+                    <path d="M448 8C412 10 392 27 376 44C360 61 346 69 324 70C344 65 356 53 370 36C386 17 408 6 448 8Z" fill="#E09F1F"/>
+                    <rect x="142" y="39" width="136" height="4.5" rx="1.5" fill="#4E8634"/>
+                    <path d="M161 28L168 35" stroke="#4E8634" stroke-width="4" stroke-linecap="round"/>
+                    <text x="143" y="68" fill="#4E8634" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="33" letter-spacing="-0.5">nivaran dx</text>
+                </svg>
+                <div>
+                    <div class="font-bold text-ink font-sans text-lg">Nivaran Dx Private Limited</div>
+                    <p class="font-hand text-sm text-stone-600">Accessible Point-of-Care Infectious Disease Diagnostics • Incubated at BITS Pilani, Hyderabad</p>
+                </div>
+            </div>
+            <div class="font-hand text-base text-center md:text-right space-y-1">
+                <div>
+                    Email: <a href="mailto:nivarandx@gmail.com" id="footer-email-link" class="font-mono text-sm font-bold text-brandGreen underline hover:text-brandRed">nivarandx@gmail.com</a>
+                </div>
+                <div>© 2026 Nivaran Dx Private Limited. All rights reserved.</div>
+                <button onclick="openCmsModal()" class="text-xs underline text-stone-600 hover:text-brandRed">View Google Sheet Tab Guide</button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INQUIRY CONFIRMATION MODAL -->
+    <div id="success-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+        <div class="sketch-box bg-white max-w-md w-full p-6 text-center rotate-1 relative">
+            <div class="w-12 h-12 rounded-full bg-emerald-200 border-2 border-ink flex items-center justify-center mx-auto mb-3">
+                <span class="text-2xl font-bold text-brandGreen">✓</span>
+            </div>
+            <h4 class="text-2xl font-extrabold text-ink font-sans mb-1">Thank You for Reaching Out!</h4>
+            <p id="modal-text" class="font-hand text-lg text-stone-600 mb-6 leading-snug">
+                Your details have been recorded. You will receive product updates from Nivaran Dx.
+            </p>
+            <button onclick="closeModal()" class="sketch-btn px-6 py-2 bg-amber-300 hover:bg-amber-400 font-hand text-lg font-bold">
+                Done
+            </button>
+        </div>
+    </div>
+
+    <!-- GOOGLE SHEETS CMS SETUP MODAL -->
+    <div id="cms-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+        <div class="sketch-box bg-[#FFFDF9] max-w-2xl w-full p-6 sm:p-8 relative max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b-2 border-ink pb-3 mb-4">
+                <div>
+                    <span class="font-hand text-xs font-bold uppercase text-brandRed">Zero-Code Live Sync</span>
+                    <h4 class="text-xl font-extrabold text-ink">Connected Google Sheet: Tab Names</h4>
+                </div>
+                <button onclick="closeCmsModal()" class="sketch-btn px-2.5 py-0.5 bg-stone-200 font-bold text-sm">✕</button>
+            </div>
+
+            <p class="font-hand text-base text-stone-700 mb-4">
+                Your website automatically reads tabs by their exact name from your Google Sheet (<code>1BtZVPuoHxaxerJSBHZEHBa-OX1vXhRfUX1uLrZiPvoU</code>)—no <code>gid</code> numbers or GitHub code edits needed!
+            </p>
+
+            <div class="border-2 border-ink rounded-xl bg-white p-4 mb-5 font-mono text-xs space-y-2">
+                <div><strong>1. About_Content</strong> → Columns: <code>Key | Value</code></div>
+                <div><strong>2. People</strong> → Columns: <code>Name | Role | Affiliation_Or_Bio | Photo_URL | Google_Scholar | Personal_Website</code></div>
+                <div><strong>3. Solutions</strong> → Columns: <code>Title | Description | Step_1 | Step_2 | Step_3 | Target | Format | Status | Photo_1_URL | Photo_1_Caption | Photo_2_URL | Photo_2_Caption | Photo_3_URL | Photo_3_Caption</code></div>
+                <div><strong>4. Publications</strong> → Columns: <code>Year | Title | Authors | Journal | DOI_Or_Link | Figure_Link</code></div>
+                <div><strong>5. Patents</strong> → Columns: <code>Year | Application_No | Title | Inventors | Status | Link</code></div>
+                <div><strong>6. Careers</strong> → Columns: <code>Role_Title | Type | Location | Description</code></div>
+                <div><strong>7. Media_Events</strong> → Columns: <code>Date | Event_Name | Location | Highlights | Photo_URL</code></div>
+                <div><strong>8. Media_News</strong> → Columns: <code>Date | Headline | Source | Summary | Link</code></div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-3 border-t border-stone-200 pt-4">
+                <a href="https://docs.google.com/spreadsheets/d/1BtZVPuoHxaxerJSBHZEHBa-OX1vXhRfUX1uLrZiPvoU/edit" target="_blank" rel="noopener" class="sketch-btn px-4 py-2 bg-amber-200 hover:bg-amber-300 font-hand text-base font-bold">
+                    ↗ Open Google Sheet
+                </a>
+                <div class="flex gap-2">
+                    <button onclick="closeCmsModal(); syncAllTabs();" class="sketch-btn px-4 py-2 bg-brandGreen text-white font-hand text-base font-bold">
+                        🔄 Refresh Live Data
+                    </button>
+                    <button onclick="closeCmsModal()" class="sketch-btn px-4 py-2 bg-white font-hand text-base font-bold">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT: LIVE GOOGLE SHEETS CSV SYNC + INTERACTIVE UI -->
+    <script>
+        /**
+         * ============================================================================
+         * NIVARAN DX GOOGLE SHEETS CMS CONFIGURATION (READS DIRECTLY BY TAB NAME)
+         * ============================================================================
+         */
+        const SPREADSHEET_ID = '1BtZVPuoHxaxerJSBHZEHBa-OX1vXhRfUX1uLrZiPvoU';
+
+        const SHEET_CONFIG = {
+            tabs: {
+                about: 'About_Content',
+                people: 'People',
+                solutions: 'Solutions',
+                publications: 'Publications',
+                patents: 'Patents',
+                careers: 'Careers',
+                events: 'Media_Events',
+                news: 'Media_News'
+            },
+            // Optional: Paste a Google Apps Script Web App URL here if you want inquiry form submissions
+            // to automatically write new rows into a `Product_Inquiries` tab in your Google Sheet.
+            inquiryWebhookUrl: ''
+        };
+
+        /**
+         * ============================================================================
+         * RESILIENT DEFAULT CONTENT (Pre-loaded with all your exact Directors & Sections)
+         * ============================================================================
+         */
+        const DEFAULT_DATA = {
+            people: [
+                {
+                    Name: 'Prof. Jayati Ray Dutta',
+                    Role: 'Director',
+                    Affiliation_Or_Bio: 'Co-Founder & Director, Nivaran Dx. Leading translational infectious disease diagnostics and biological assay innovation.',
+                    Photo_URL: '',
+                    Google_Scholar: '',
+                    Personal_Website: ''
+                },
+                {
+                    Name: 'Prof. Ramakrishnan Ganesan',
+                    Role: 'Director',
+                    Affiliation_Or_Bio: 'Co-Founder & Director, Nivaran Dx. Leading nanomaterial synthesis, plasmonic & molecular sensing architectures.',
+                    Photo_URL: '',
+                    Google_Scholar: '',
+                    Personal_Website: ''
+                },
+                {
+                    Name: 'Mr. Debarun Paul',
+                    Role: 'Director',
+                    Affiliation_Or_Bio: 'Co-Founder & Director, Nivaran Dx. Leading point-of-care device engineering, semi-automated assay integration, and product translation.',
+                    Photo_URL: '',
+                    Google_Scholar: '',
+                    Personal_Website: ''
+                }
+            ],
+            publications: [
+                {
+                    Year: '2026',
+                    Title: 'Peer-reviewed research publications from the Nivaran Dx group will appear here as added in the `Publications` Google Sheet tab.',
+                    Authors: 'Nivaran Dx Research Group',
+                    Journal: 'Add Journal Name & DOI in Google Sheets',
+                    DOI_Or_Link: '',
+                    Figure_Link: ''
+                }
+            ],
+            patents: [
+                {
+                    Year: '2025',
+                    Application_No: 'Patent Filing',
+                    Title: 'Point-of-Care Infectious Disease Diagnostic Platform & Assay Architecture (Add exact patent title & number in the `Patents` tab).',
+                    Inventors: 'Prof. Jayati Ray Dutta, Prof. Ramakrishnan Ganesan, Mr. Debarun Paul',
+                    Status: 'Filed / Pending',
+                    Link: ''
+                }
+            ],
+            careers: [
+                // Kept intentionally empty as requested ("careers where as of now we will keep it blank")
+            ],
+            events: [
+                // Kept empty until rows are added in `Media_Events` Google Sheet tab
+            ],
+            news: [
+                // Kept empty until rows are added in `Media_News` Google Sheet tab
+            ]
+        };
+
+        /**
+         * ============================================================================
+         * IMAGE URL NORMALIZER (Supports Google Drive Share Links + Direct Image URLs)
+         * ============================================================================
+         */
+        function normalizeImageUrl(rawUrl) {
+            if (!rawUrl) return '';
+            const url = rawUrl.trim();
+            // Convert standard Google Drive sharing links (/file/d/FILE_ID/view or ?id=FILE_ID) into direct embeddable image links
+            const driveFileMatch = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+            if (driveFileMatch && driveFileMatch[1]) {
+                return `https://lh3.googleusercontent.com/d/${driveFileMatch[1]}`;
+            }
+            const driveOpenMatch = url.match(/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/);
+            if (driveOpenMatch && driveOpenMatch[1]) {
+                return `https://lh3.googleusercontent.com/d/${driveOpenMatch[1]}`;
+            }
+            return url;
+        }
+
+        /**
+         * ============================================================================
+         * CSV PARSER & GOOGLE SHEET FETCHER
+         * ============================================================================
+         */
+        function parseCSV(csvText) {
+            const rows = [];
+            let currentRow = [];
+            let currentCell = '';
+            let insideQuotes = false;
+
+            for (let i = 0; i < csvText.length; i++) {
+                const char = csvText[i];
+                const nextChar = csvText[i + 1];
+
+                if (char === '"') {
+                    if (insideQuotes && nextChar === '"') {
+                        currentCell += '"';
+                        i++;
+                    } else {
+                        insideQuotes = !insideQuotes;
+                    }
+                } else if (char === ',' && !insideQuotes) {
+                    currentRow.push(currentCell.trim());
+                    currentCell = '';
+                } else if ((char === '\n' || (char === '\r' && nextChar === '\n')) && !insideQuotes) {
+                    if (char === '\r') i++;
+                    currentRow.push(currentCell.trim());
+                    if (currentRow.some(cell => cell !== '')) {
+                        rows.push(currentRow);
+                    }
+                    currentRow = [];
+                    currentCell = '';
+                } else {
+                    currentCell += char;
+                }
+            }
+            if (currentCell !== '' || currentRow.length > 0) {
+                currentRow.push(currentCell.trim());
+                if (currentRow.some(cell => cell !== '')) {
+                    rows.push(currentRow);
+                }
+            }
+
+            if (rows.length < 2) return [];
+            const headers = rows[0].map(h => h.trim());
+            return rows.slice(1).map(row => {
+                const obj = {};
+                headers.forEach((header, idx) => {
+                    obj[header] = row[idx] !== undefined ? row[idx] : '';
+                });
+                return obj;
+            });
+        }
+        async function fetchSheetTab(sheetName) {
+            if (!sheetName) return null;
+            // Google Visualization CSV endpoint fetches any tab directly by its exact tab name!
+            const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
+            try {
+                const response = await fetch(url, { cache: 'no-store' });
+                if (!response.ok) return null;
+                const text = await response.text();
+                if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html')) {
+                    return null;
+                }
+                return parseCSV(text);
+            } catch (err) {
+                console.warn('Fallback data active for tab:', sheetName);
+                return null;
+            }
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        /**
+         * ============================================================================
+         * SECTION RENDERERS
+         * ============================================================================
+         */
+        function renderPeople(peopleList) {
+            const grid = document.getElementById('people-grid');
+            if (!grid) return;
+            const bgColors = ['bg-emerald-100', 'bg-amber-100', 'bg-rose-100'];
+
+            grid.innerHTML = peopleList.map((person, idx) => {
+                const name = person.Name || 'Director';
+                const initials = name
+                    .replace(/^(Prof\.|Dr\.|Mr\.|Ms\.)\s*/i, '')
+                    .split(' ')
+                    .map(w => w[0])
+                    .join('')
+                    .substring(0, 2)
+                    .toUpperCase();
+                const bg = bgColors[idx % bgColors.length];
+
+                const normalizedPhoto = normalizeImageUrl(person.Photo_URL);
+                const avatarHtml = normalizedPhoto
+                    ? `<img src="${escapeHtml(normalizedPhoto)}" alt="${escapeHtml(name)}" class="w-16 h-16 rounded-full object-cover border-2 border-ink shrink-0" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div style="display:none;" class="w-16 h-16 rounded-full ${bg} border-2 border-ink flex items-center justify-center font-extrabold text-xl text-ink shrink-0">${escapeHtml(initials)}</div>`
+                    : `<div class="w-16 h-16 rounded-full ${bg} border-2 border-ink flex items-center justify-center font-extrabold text-xl text-ink shrink-0">${escapeHtml(initials)}</div>`;
+
+                const scholarLink = person.Google_Scholar && person.Google_Scholar.trim()
+                    ? `<a href="${escapeHtml(person.Google_Scholar)}" target="_blank" rel="noopener" class="sketch-btn px-3 py-1 bg-sky-100 hover:bg-sky-200 font-hand text-xs font-bold">🎓 Google Scholar ↗</a>`
+                    : '';
+
+                const websiteLink = person.Personal_Website && person.Personal_Website.trim()
+                    ? `<a href="${escapeHtml(person.Personal_Website)}" target="_blank" rel="noopener" class="sketch-btn px-3 py-1 bg-amber-100 hover:bg-amber-200 font-hand text-xs font-bold">🌐 Personal Website ↗</a>`
+                    : '';
+
+                const linksFooter = (scholarLink || websiteLink)
+                    ? `<div class="mt-5 pt-3 border-t border-dashed border-stone-300 flex flex-wrap gap-2">
+                            ${scholarLink}
+                            ${websiteLink}
+                        </div>`
+                    : '';
+
+                return `
+                    <div class="sketch-box bg-[#FFFDF9] p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-4 mb-4">
+                                ${avatarHtml}
+                                <div>
+                                    <h4 class="font-bold text-lg text-ink leading-tight">${escapeHtml(name)}</h4>
+                                    <span class="inline-block mt-1 px-2.5 py-0.5 bg-brandGreen text-white font-sans text-xs font-bold rounded-full border border-ink">
+                                        ${escapeHtml(person.Role || 'Director')}
+                                    </span>
+                                </div>
+                            </div>
+                            <p class="font-hand text-base text-stone-700 leading-relaxed">
+                                ${escapeHtml(person.Affiliation_Or_Bio || '')}
+                            </p>
+                        </div>
+                        ${linksFooter}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderSolutions(rows) {
+            if (!rows || rows.length === 0) return;
+            const primary = rows[0];
+            if (primary.Title) document.getElementById('sol-title').textContent = primary.Title;
+            if (primary.Description) document.getElementById('sol-desc').textContent = primary.Description;
+            if (primary.Step_1) document.getElementById('sol-step1').textContent = primary.Step_1;
+            if (primary.Step_2) document.getElementById('sol-step2').textContent = primary.Step_2;
+            if (primary.Step_3) document.getElementById('sol-step3').textContent = primary.Step_3;
+            if (primary.Target) document.getElementById('sol-target').textContent = primary.Target;
+            if (primary.Format) document.getElementById('sol-format').textContent = primary.Format;
+            if (primary.Status) document.getElementById('sol-status-badge').textContent = primary.Status;
+
+            // Collect all non-empty photos across rows or Photo_1_URL / Photo_2_URL / Photo_3_URL / Figure_URL
+            const galleryItems = [];
+            rows.forEach((row, rIdx) => {
+                const candidates = [
+                    { url: row.Photo_1_URL || row.Figure_URL || '', caption: row.Photo_1_Caption || (rIdx === 0 ? 'Semi-Automated PoC Device & Assay Schematic' : row.Title || `Prototype ${rIdx + 1}`) },
+                    { url: row.Photo_2_URL || '', caption: row.Photo_2_Caption || 'Assay & Reagent Workflow' },
+                    { url: row.Photo_3_URL || '', caption: row.Photo_3_Caption || 'Optical Readout & Results' }
+                ];
+                candidates.forEach(item => {
+                    const cleanUrl = normalizeImageUrl(item.url);
+                    if (cleanUrl) {
+                        galleryItems.push({ url: cleanUrl, caption: item.caption });
+                    }
+                });
+            });
+
+            if (galleryItems.length > 0) {
+                const grid = document.getElementById('sol-gallery-grid');
+                // Show 1 full-width image if 1 photo is provided, or automatically expand to 2/3 columns if more are added later
+                if (galleryItems.length === 1) {
+                    grid.className = 'grid grid-cols-1 gap-4';
+                } else if (galleryItems.length === 2) {
+                    grid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-4';
+                } else {
+                    grid.className = 'grid grid-cols-1 sm:grid-cols-3 gap-3';
+                }
+
+                const heightClass = galleryItems.length === 1 ? 'max-h-[420px]' : 'aspect-square';
+
+                grid.innerHTML = galleryItems.map((item, idx) => `
+                    <div class="flex flex-col">
+                        <div class="w-full rounded-xl border-2 border-ink bg-white overflow-hidden flex items-center justify-center">
+                            <img src="${escapeHtml(item.url)}" alt="${escapeHtml(item.caption)}" class="w-full ${heightClass} object-contain bg-white" onerror="this.parentElement.innerHTML='<div class=\\'p-4 text-center font-hand text-sm text-brandRed\\'>Image could not load. Check that your Google Drive file is set to <strong>Anyone with the link</strong> or use a direct image URL.</div>'">
+                        </div>
+                        <span class="font-hand text-sm text-center text-stone-700 font-bold mt-2">${escapeHtml(item.caption)}</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function renderPublications(pubs) {
+            const list = document.getElementById('publications-list');
+            if (!pubs || pubs.length === 0) {
+                list.innerHTML = `<p class="font-hand text-base text-stone-500">No publications listed yet.</p>`;
+                return;
+            }
+            list.innerHTML = pubs.map(pub => `
+                <div class="sketch-box-flat bg-[#FFFDF9] p-4 sm:p-5">
+                    <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                        <span class="px-2 py-0.5 bg-amber-200 border border-ink rounded-md font-mono text-xs font-bold">${escapeHtml(pub.Year || '2026')}</span>
+                        <span class="font-bold text-xs text-brandGreen">${escapeHtml(pub.Journal || '')}</span>
+                    </div>
+                    <h4 class="font-bold text-base text-ink leading-snug">${escapeHtml(pub.Title)}</h4>
+                    ${pub.Authors ? `<p class="font-hand text-sm text-stone-600 mt-1">${escapeHtml(pub.Authors)}</p>` : ''}
+                    <div class="mt-2 flex flex-wrap gap-3">
+                        ${pub.DOI_Or_Link ? `<a href="${escapeHtml(pub.DOI_Or_Link)}" target="_blank" rel="noopener" class="font-mono text-xs text-blue-700 underline hover:text-brandRed">Read Paper / DOI ↗</a>` : ''}
+                        ${pub.Figure_Link ? `<a href="${escapeHtml(pub.Figure_Link)}" target="_blank" rel="noopener" class="font-mono text-xs text-brandGreen underline hover:text-brandRed">View Figure ↗</a>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderPatents(patents) {
+            const list = document.getElementById('patents-list');
+            if (!patents || patents.length === 0) {
+                list.innerHTML = `<p class="font-hand text-base text-stone-500">No patents listed yet.</p>`;
+                return;
+            }
+            list.innerHTML = patents.map(pat => `
+                <div class="sketch-box-flat bg-[#FFFDF9] p-4 sm:p-5">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+                        <span class="px-2 py-0.5 bg-rose-200 border border-ink rounded-md font-mono text-xs font-bold">${escapeHtml(pat.Application_No || 'Patent')} (${escapeHtml(pat.Year || '')})</span>
+                        <span class="px-2 py-0.5 bg-white border border-ink rounded-full font-hand text-xs font-bold">${escapeHtml(pat.Status || 'Filed')}</span>
+                    </div>
+                    <h4 class="font-bold text-base text-ink leading-snug">${escapeHtml(pat.Title)}</h4>
+                    ${pat.Inventors ? `<p class="font-hand text-sm text-stone-600 mt-1">Inventors: ${escapeHtml(pat.Inventors)}</p>` : ''}
+                    ${pat.Link ? `<div class="mt-2"><a href="${escapeHtml(pat.Link)}" target="_blank" rel="noopener" class="font-mono text-xs text-blue-700 underline">Patent Details ↗</a></div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function renderCareers(jobs) {
+            const container = document.getElementById('careers-container');
+            if (!jobs || jobs.length === 0) {
+                // Keep clean blank state as requested
+                return;
+            }
+            container.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    ${jobs.map(job => `
+                        <div class="sketch-box bg-[#FFFDF9] p-6 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between gap-2 mb-2">
+                                    <span class="px-2.5 py-0.5 bg-emerald-200 border border-ink rounded-full font-hand text-xs font-bold">${escapeHtml(job.Type || 'Full-Time / Fellowship')}</span>
+                                    <span class="font-hand text-xs text-stone-500">${escapeHtml(job.Location || 'Hyderabad')}</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-ink">${escapeHtml(job.Role_Title)}</h3>
+                                <p class="font-hand text-base text-stone-600 mt-2">${escapeHtml(job.Description)}</p>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-stone-200">
+                                <a href="#product-inquiry" class="sketch-btn inline-block px-4 py-1.5 bg-amber-300 font-hand text-sm font-bold">Apply / Inquire ➔</a>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderEvents(events) {
+            const list = document.getElementById('events-list');
+            if (!events || events.length === 0) {
+                list.innerHTML = `
+                    <div class="sketch-box-flat bg-sky-50/40 p-6 text-center">
+                        <div class="font-hand text-lg font-bold text-ink">We will be back with event updates soon!</div>
+                        <p class="font-hand text-sm text-stone-600 mt-1">Conferences, clinical symposia, and showcase appearances will be posted here.</p>
+                    </div>
+                `;
+                return;
+            }
+            list.innerHTML = events.map(ev => {
+                const evPhoto = normalizeImageUrl(ev.Photo_URL);
+                return `
+                <div class="sketch-box-flat bg-sky-50/60 p-4 sm:p-5">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+                        <span class="font-mono text-xs font-bold text-sky-800">${escapeHtml(ev.Date || '')}</span>
+                        <span class="px-2 py-0.5 bg-white border border-ink rounded-full font-hand text-xs font-bold">📍 ${escapeHtml(ev.Location || 'India')}</span>
+                    </div>
+                    <h4 class="font-bold text-base text-ink">${escapeHtml(ev.Event_Name)}</h4>
+                    <p class="font-hand text-base text-stone-700 mt-1">${escapeHtml(ev.Highlights || '')}</p>
+                    ${evPhoto ? `<img src="${escapeHtml(evPhoto)}" alt="${escapeHtml(ev.Event_Name)}" class="mt-3 rounded-lg border border-ink max-h-48 w-full object-cover">` : ''}
+                </div>
+            `;
+            }).join('');
+        }
+
+        function renderNews(newsItems) {
+            const list = document.getElementById('news-list');
+            if (!newsItems || newsItems.length === 0) {
+                list.innerHTML = `
+                    <div class="sketch-box-flat bg-amber-50/50 p-6 text-center">
+                        <div class="font-hand text-lg font-bold text-ink">We will be back with some news soon!</div>
+                        <p class="font-hand text-sm text-stone-600 mt-1">Startup milestones, grants, and press announcements will appear here.</p>
+                    </div>
+                `;
+                return;
+            }
+            list.innerHTML = newsItems.map(item => `
+                <div class="sketch-box-flat bg-amber-50/70 p-4 sm:p-5">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+                        <span class="font-mono text-xs font-bold text-brandRed">${escapeHtml(item.Date || '')}</span>
+                        <span class="px-2 py-0.5 bg-white border border-ink rounded-full font-hand text-xs font-bold">${escapeHtml(item.Source || 'Startup Update')}</span>
+                    </div>
+                    <h4 class="font-bold text-base text-ink">${escapeHtml(item.Headline)}</h4>
+                    <p class="font-hand text-base text-stone-700 mt-1">${escapeHtml(item.Summary || '')}</p>
+                    ${item.Link ? `<div class="mt-2"><a href="${escapeHtml(item.Link)}" target="_blank" rel="noopener" class="font-mono text-xs text-blue-700 underline">Read Full Story ↗</a></div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function applyAboutKeyValues(rows) {
+            if (!rows || rows.length === 0) return false;
+            let matched = false;
+            rows.forEach(row => {
+                const key = (row.Key || '').trim();
+                const val = (row.Value || '').trim();
+                if (!key || !val) return;
+
+                if (key === 'Hero_Title') {
+                    document.getElementById('hero-title').textContent = val;
+                    matched = true;
+                } else if (key === 'Hero_Tagline') {
+                    document.getElementById('hero-tagline').textContent = val;
+                    matched = true;
+                } else if (key === 'Who_We_Are') {
+                    document.getElementById('who-we-are-text').textContent = val;
+                    matched = true;
+                } else if (key === 'Who_We_Are_Subtext') {
+                    document.getElementById('who-we-are-subtext').textContent = val;
+                    matched = true;
+                } else if (key === 'Our_Inspiration') {
+                    document.getElementById('our-inspiration-text').innerHTML = `<p>${escapeHtml(val)}</p>`;
+                    matched = true;
+                } else if (key === 'Contact_Email') {
+                    const contactEl = document.getElementById('contact-email-display');
+                    contactEl.textContent = val;
+                    contactEl.href = `mailto:${val}`;
+                    const footerEmailEl = document.getElementById('footer-email-link');
+                    if (footerEmailEl) {
+                        footerEmailEl.textContent = val;
+                        footerEmailEl.href = `mailto:${val}`;
+                    }
+                    matched = true;
+                } else if (key === 'Location') {
+                    document.getElementById('contact-location').textContent = val;
+                    matched = true;
+                }
+            });
+            return matched;
+        }
+
+        /**
+         * ============================================================================
+         * MASTER SYNC FUNCTION
+         * ============================================================================
+         */
+        async function syncAllTabs() {
+            const statusText = document.getElementById('cms-status-text');
+            const dot = document.getElementById('cms-dot');
+
+            // Render defaults first so page is never blank
+            renderPeople(DEFAULT_DATA.people);
+            renderPublications(DEFAULT_DATA.publications);
+            renderPatents(DEFAULT_DATA.patents);
+            renderCareers(DEFAULT_DATA.careers);
+            renderEvents(DEFAULT_DATA.events);
+            renderNews(DEFAULT_DATA.news);
+
+            let syncedCount = 0;
+
+            const aboutRows = await fetchSheetTab(SHEET_CONFIG.tabs.about);
+            if (aboutRows && aboutRows.length > 0) {
+                if (applyAboutKeyValues(aboutRows)) syncedCount++;
+            }
+
+            const peopleRows = await fetchSheetTab(SHEET_CONFIG.tabs.people);
+            if (peopleRows && peopleRows.length > 0 && peopleRows[0].Name) {
+                renderPeople(peopleRows);
+                syncedCount++;
+            }
+
+            const solRows = await fetchSheetTab(SHEET_CONFIG.tabs.solutions);
+            if (solRows && solRows.length > 0 && solRows[0].Title) {
+                renderSolutions(solRows);
+                syncedCount++;
+            }
+
+            const pubRows = await fetchSheetTab(SHEET_CONFIG.tabs.publications);
+            if (pubRows && pubRows.length > 0 && pubRows[0].Title) {
+                renderPublications(pubRows);
+                syncedCount++;
+            }
+
+            const patRows = await fetchSheetTab(SHEET_CONFIG.tabs.patents);
+            if (patRows && patRows.length > 0 && patRows[0].Title) {
+                renderPatents(patRows);
+                syncedCount++;
+            }
+
+            const careerRows = await fetchSheetTab(SHEET_CONFIG.tabs.careers);
+            if (careerRows && careerRows.length > 0 && careerRows[0].Role_Title) {
+                renderCareers(careerRows);
+                syncedCount++;
+            }
+
+            const eventRows = await fetchSheetTab(SHEET_CONFIG.tabs.events);
+            if (eventRows && eventRows.length > 0 && eventRows[0].Event_Name) {
+                renderEvents(eventRows);
+                syncedCount++;
+            } else if (eventRows !== null) {
+                // Tab exists in Google Sheet and is currently empty
+                renderEvents([]);
+                syncedCount++;
+            }
+
+            const newsRows = await fetchSheetTab(SHEET_CONFIG.tabs.news);
+            if (newsRows && newsRows.length > 0 && newsRows[0].Headline) {
+                renderNews(newsRows);
+                syncedCount++;
+            } else if (newsRows !== null) {
+                // Tab exists in Google Sheet and is currently empty
+                renderNews([]);
+                syncedCount++;
+            }
+
+            if (syncedCount > 0) {
+                dot.className = 'w-2 h-2 rounded-full bg-brandGreen';
+                statusText.textContent = `Google Sheet Live (${syncedCount} tab${syncedCount > 1 ? 's' : ''} synced)`;
+            } else {
+                dot.className = 'w-2 h-2 rounded-full bg-amber-500';
+                statusText.textContent = 'Sheet Connected (Add Tab Names)';
+            }
+        }
+
+        /**
+         * ============================================================================
+         * UI INTERACTIONS & FORM HANDLING
+         * ============================================================================
+         */
+        document.getElementById('mobile-toggle').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        function copyContactEmail() {
+            const emailText = document.getElementById('contact-email-display').textContent;
+            const tempInput = document.createElement('input');
+            tempInput.value = emailText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            const feedback = document.getElementById('copy-feedback');
+            feedback.classList.remove('hidden');
+            setTimeout(() => feedback.classList.add('hidden'), 2500);
+        }
+
+        async function handleInquirySubmit(e) {
+            e.preventDefault();
+            const payload = {
+                timestamp: new Date().toISOString(),
+                name: document.getElementById('inq-name').value.trim(),
+                email: document.getElementById('inq-email').value.trim(),
+                organization: document.getElementById('inq-org').value.trim(),
+                interest: document.getElementById('inq-interest').value,
+                notes: document.getElementById('inq-notes').value.trim(),
+                subscribe: document.getElementById('inq-subscribe').checked ? 'Yes' : 'No'
+            };
+
+            // Save locally in browser as backup
+            const saved = JSON.parse(localStorage.getItem('ndx_inquiries') || '[]');
+            saved.push(payload);
+            localStorage.setItem('ndx_inquiries', JSON.stringify(saved));
+
+            // If user configured a Google Apps Script webhook URL, send directly to Google Sheet
+            if (SHEET_CONFIG.inquiryWebhookUrl) {
+                try {
+                    await fetch(SHEET_CONFIG.inquiryWebhookUrl, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                } catch (err) {
+                    console.warn('Webhook post queued locally:', err);
+                }
+            }
+
+            document.getElementById('modal-text').textContent =
+                `Thank you, ${payload.name}! Your inquiry (${payload.interest}) has been registered. We will send Nivaran Dx product updates to ${payload.email}.`;
+            document.getElementById('success-modal').classList.remove('hidden');
+            document.getElementById('inquiry-form').reset();
+        }
+
+        function closeModal() {
+            document.getElementById('success-modal').classList.add('hidden');
+        }
+
+        function openCmsModal() {
+            document.getElementById('cms-modal').classList.remove('hidden');
+        }
+
+        function closeCmsModal() {
+            document.getElementById('cms-modal').classList.add('hidden');
+        }
+
+        window.addEventListener('DOMContentLoaded', syncAllTabs);
+    </script>
+</body>
+</html>
