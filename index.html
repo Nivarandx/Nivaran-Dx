@@ -10,6 +10,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Samarkan Font CDN for Authentic Brand Logo Rendering -->
+    <link href="https://fonts.cdnfonts.com/css/samarkan" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -98,50 +100,37 @@
 </head>
 <body class="selection:bg-amber-200 selection:text-ink font-sans text-ink">
 
-    <!-- Top Google Sheets Live CMS Status Ribbon -->
+    <!-- Top Brand Ribbon -->
     <div class="border-b-2 border-ink bg-amber-100/85 px-4 py-1.5 text-xs sm:text-sm font-hand">
         <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
             <div class="flex items-center gap-2">
                 <span class="px-2 py-0.5 bg-brandGreen text-white font-sans font-bold text-[10px] uppercase tracking-wider rounded-sm border border-ink">Nivaran Dx</span>
                 <span>Infectious Disease Point-of-Care Diagnostics • Incubated at BITS Pilani, Hyderabad</span>
             </div>
-            <div class="flex items-center gap-2">
-                <span id="cms-status-pill" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-white border border-ink rounded-full text-xs font-sans font-semibold">
-                    <span id="cms-dot" class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-                    <span id="cms-status-text">Syncing Google Sheet...</span>
-                </span>
-                <button onclick="openCmsModal()" class="underline font-bold text-stone-800 hover:text-brandRed text-xs" title="View Google Sheet tab template">
-                    [Sheet Template]
-                </button>
-            </div>
         </div>
     </div>
 
     <!-- 1. STICKY TITLE BAR WITH EXACT NAVIGATION HEADINGS & SUBHEADINGS -->
     <header class="border-b-2 border-ink bg-[#FAF6EE]/95 backdrop-blur-xs sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between gap-4">
             
-            <!-- Brand Logo (Uses company logo.png if present in GitHub repo, with exact SVG vector fallback) -->
+            <!-- Brand Logo (Enlarged & Bold in Samarkan Font) -->
             <a href="#top" class="flex items-center space-x-2 group shrink-0" aria-label="Nivaran Dx Home">
-                <img src="company logo.png" alt="Nivaran Dx Logo" class="h-11 sm:h-12 w-auto object-contain" onerror="this.style.display='none'; document.getElementById('nivaran-svg-logo').style.display='block';">
+                <img src="company logo.png" alt="Nivaran Dx Logo" class="h-14 sm:h-16 md:h-20 w-auto object-contain" onerror="this.style.display='none'; document.getElementById('nivaran-svg-logo').style.display='block';">
                 
-                <!-- Exact Vector Replica of Uploaded Logo -->
-                <svg id="nivaran-svg-logo" style="display:none;" class="h-11 sm:h-12 w-auto" viewBox="0 0 460 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Exact Vector Replica of Uploaded Logo in Bold Samarkan Font -->
+                <svg id="nivaran-svg-logo" style="display:none;" class="h-14 sm:h-16 md:h-20 w-auto" viewBox="0 0 540 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <!-- Bottom-Left Dynamic Red Swoosh -->
-                    <path d="M12 104C48 102 68 85 84 68C100 51 114 43 136 42C116 47 104 59 90 76C74 95 52 106 12 104Z" fill="#E60000"/>
+                    <path d="M10 112C54 110 78 90 96 71C114 52 130 43 154 42C132 48 118 61 102 80C84 101 58 114 10 112Z" fill="#E60000"/>
                     <!-- Top-Right Dynamic Golden-Amber Swoosh -->
-                    <path d="M448 8C412 10 392 27 376 44C360 61 346 69 324 70C344 65 356 53 370 36C386 17 408 6 448 8Z" fill="#E09F1F"/>
-                    <!-- Devanagari-inspired Top Shirorekha Bar over 'nivaran' -->
-                    <rect x="142" y="39" width="136" height="4.5" rx="1.5" fill="#4E8634"/>
-                    <!-- Dot/Matra accent over 'i' -->
-                    <path d="M161 28L168 35" stroke="#4E8634" stroke-width="4" stroke-linecap="round"/>
-                    <!-- Wordmark: nivaran dx -->
-                    <text x="143" y="68" fill="#4E8634" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="33" letter-spacing="-0.5">nivaran dx</text>
+                    <path d="M530 8C486 10 462 30 444 49C426 68 410 77 386 78C408 72 422 59 438 40C456 19 482 6 530 8Z" fill="#E09F1F"/>
+                    <!-- Wordmark: nivaran dx in Medium-Bold Samarkan Font -->
+                    <text x="270" y="76" text-anchor="middle" fill="#4E8634" stroke="#4E8634" stroke-width="0.6" stroke-linejoin="round" font-family="'Samarkan', 'Space Grotesk', sans-serif" font-weight="600" font-size="46" letter-spacing="0.5">nivaran dx</text>
                 </svg>
             </a>
 
             <!-- Desktop Title Bar Navigation -->
-            <nav class="hidden lg:flex items-center space-x-5 text-sm font-bold text-ink">
+            <nav class="hidden md:flex items-center space-x-4 lg:space-x-6 text-sm font-bold text-ink">
                 
                 <!-- 1. About Us (with Dropdown for Who We Are, Our Inspiration, Our People) -->
                 <div class="relative nav-dropdown py-2">
@@ -187,19 +176,19 @@
                 </div>
 
                 <!-- 6. General Product Inquiry -->
-                <a href="#product-inquiry" class="sketch-btn px-4 py-2 bg-amber-300 hover:bg-amber-400 font-hand text-base font-bold text-ink">
+                <a href="#product-inquiry" class="sketch-btn px-3.5 py-2 bg-amber-300 hover:bg-amber-400 font-hand text-base font-bold text-ink whitespace-nowrap">
                     General Product Inquiry
                 </a>
             </nav>
 
             <!-- Mobile Hamburger Button -->
-            <button id="mobile-toggle" class="lg:hidden p-2 border-2 border-ink rounded-lg bg-amber-100" aria-label="Toggle Menu">
+            <button id="mobile-toggle" class="md:hidden p-2 border-2 border-ink rounded-lg bg-amber-100" aria-label="Toggle Menu">
                 <svg class="w-6 h-6 text-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
             </button>
         </div>
 
         <!-- Mobile Menu Drawer -->
-        <div id="mobile-menu" class="hidden lg:hidden border-t-2 border-ink bg-[#FAF6EE] px-6 py-4 space-y-3 text-sm font-bold">
+        <div id="mobile-menu" class="hidden md:hidden border-t-2 border-ink bg-[#FAF6EE] px-6 py-4 space-y-3 text-sm font-bold">
             <div>
                 <a href="#about-us" class="block text-brandGreen">About Us</a>
                 <div class="pl-4 mt-1 space-y-1 font-hand text-base text-stone-700">
@@ -379,7 +368,6 @@
                             </div>
                             <h3 class="text-2xl sm:text-3xl font-extrabold text-ink">Our People</h3>
                         </div>
-                        <span class="font-hand text-sm text-stone-600">Editable via `People` sheet tab (Scholar &amp; Website links)</span>
                     </div>
 
                     <!-- Directors Grid (Populated via JS / Google Sheet) -->
@@ -401,7 +389,6 @@
                     <div>
                         <h2 class="text-3xl sm:text-4xl font-extrabold text-ink">Our Solutions</h2>
                     </div>
-                    <span class="font-hand text-sm text-stone-600">Synced with `Solutions` sheet tab</span>
                 </div>
 
                 <!-- Primary Flagship Platform Card -->
@@ -470,8 +457,7 @@
                                                 <circle cx="38" cy="64" r="6" fill="#FDA4AF" stroke="#1C1917"/>
                                                 <circle cx="56" cy="64" r="6" fill="#86EFAC" stroke="#1C1917"/>
                                             </svg>
-                                            <span class="font-hand text-base font-bold text-ink">Device &amp; Assay Schematic Frame</span>
-                                            <span class="font-hand text-xs text-stone-500 mt-0.5">Add `Photo_1_URL` (or `Figure_URL`) in the `Solutions` sheet tab</span>
+                                            <span class="font-hand text-base font-bold text-ink">Device &amp; Assay Schematic</span>
                                         </div>
                                         <span id="sol-caption-1" class="font-hand text-sm text-center text-stone-700 font-bold mt-2">Semi-Automated PoC Device &amp; Assay Schematic</span>
                                     </div>
@@ -514,7 +500,6 @@
                                 <span class="circle-badge bg-amber-200 font-hand text-sm">1</span>
                                 <h3 class="text-2xl font-extrabold text-ink">Publications</h3>
                             </div>
-                            <span class="font-hand text-xs text-stone-500">Synced with `Publications` tab</span>
                         </div>
 
                         <div id="publications-list" class="space-y-4">
@@ -529,7 +514,6 @@
                                 <span class="circle-badge bg-rose-200 font-hand text-sm">2</span>
                                 <h3 class="text-2xl font-extrabold text-ink">Patents</h3>
                             </div>
-                            <span class="font-hand text-xs text-stone-500">Synced with `Patents` tab</span>
                         </div>
 
                         <div id="patents-list" class="space-y-4">
@@ -550,7 +534,6 @@
                     <div>
                         <h2 class="text-3xl sm:text-4xl font-extrabold text-ink">Careers</h2>
                     </div>
-                    <span class="font-hand text-sm text-stone-600">Synced with `Careers` sheet tab</span>
                 </div>
 
                 <!-- Dynamic Careers Container: Shows clean blank/no-openings board by default, auto-renders job cards if rows are added to `Careers` tab -->
@@ -593,7 +576,6 @@
                                 <span class="circle-badge bg-sky-200 font-hand text-sm">1</span>
                                 <h3 class="text-2xl font-extrabold text-ink">Events Attended</h3>
                             </div>
-                            <span class="font-hand text-xs text-stone-500">Synced with `Media_Events` tab</span>
                         </div>
 
                         <div id="events-list" class="space-y-4">
@@ -608,7 +590,6 @@
                                 <span class="circle-badge bg-amber-200 font-hand text-sm">2</span>
                                 <h3 class="text-2xl font-extrabold text-ink">News About Our Startup</h3>
                             </div>
-                            <span class="font-hand text-xs text-stone-500">Synced with `Media_News` tab</span>
                         </div>
 
                         <div id="news-list" class="space-y-4">
@@ -720,12 +701,11 @@
     <footer class="border-t-2 border-ink bg-[#FAF6EE] py-10 text-stone-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
-                <svg class="h-10 w-auto shrink-0" viewBox="0 0 460 110" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 104C48 102 68 85 84 68C100 51 114 43 136 42C116 47 104 59 90 76C74 95 52 106 12 104Z" fill="#E60000"/>
-                    <path d="M448 8C412 10 392 27 376 44C360 61 346 69 324 70C344 65 356 53 370 36C386 17 408 6 448 8Z" fill="#E09F1F"/>
-                    <rect x="142" y="39" width="136" height="4.5" rx="1.5" fill="#4E8634"/>
-                    <path d="M161 28L168 35" stroke="#4E8634" stroke-width="4" stroke-linecap="round"/>
-                    <text x="143" y="68" fill="#4E8634" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="33" letter-spacing="-0.5">nivaran dx</text>
+                <img src="company logo.png" alt="Nivaran Dx Logo" class="h-14 sm:h-16 w-auto object-contain shrink-0" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <svg style="display:none;" class="h-14 sm:h-16 w-auto shrink-0" viewBox="0 0 540 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 112C54 110 78 90 96 71C114 52 130 43 154 42C132 48 118 61 102 80C84 101 58 114 10 112Z" fill="#E60000"/>
+                    <path d="M530 8C486 10 462 30 444 49C426 68 410 77 386 78C408 72 422 59 438 40C456 19 482 6 530 8Z" fill="#E09F1F"/>
+                    <text x="270" y="76" text-anchor="middle" fill="#4E8634" stroke="#4E8634" stroke-width="0.6" stroke-linejoin="round" font-family="'Samarkan', 'Space Grotesk', sans-serif" font-weight="600" font-size="46" letter-spacing="0.5">nivaran dx</text>
                 </svg>
                 <div>
                     <div class="font-bold text-ink font-sans text-lg">Nivaran Dx Private Limited</div>
@@ -737,7 +717,6 @@
                     Email: <a href="mailto:nivarandx@gmail.com" id="footer-email-link" class="font-mono text-sm font-bold text-brandGreen underline hover:text-brandRed">nivarandx@gmail.com</a>
                 </div>
                 <div>© 2026 Nivaran Dx Private Limited. All rights reserved.</div>
-                <button onclick="openCmsModal()" class="text-xs underline text-stone-600 hover:text-brandRed">View Google Sheet Tab Guide</button>
             </div>
         </div>
     </footer>
@@ -1271,9 +1250,6 @@
          * ============================================================================
          */
         async function syncAllTabs() {
-            const statusText = document.getElementById('cms-status-text');
-            const dot = document.getElementById('cms-dot');
-
             // Render defaults first so page is never blank
             renderPeople(DEFAULT_DATA.people);
             renderPublications(DEFAULT_DATA.publications);
@@ -1282,69 +1258,50 @@
             renderEvents(DEFAULT_DATA.events);
             renderNews(DEFAULT_DATA.news);
 
-            let syncedCount = 0;
-
             const aboutRows = await fetchSheetTab(SHEET_CONFIG.tabs.about);
             if (aboutRows && aboutRows.length > 0) {
-                if (applyAboutKeyValues(aboutRows)) syncedCount++;
+                applyAboutKeyValues(aboutRows);
             }
 
             const peopleRows = await fetchSheetTab(SHEET_CONFIG.tabs.people);
             if (peopleRows && peopleRows.length > 0 && peopleRows[0].Name) {
                 renderPeople(peopleRows);
-                syncedCount++;
             }
 
             const solRows = await fetchSheetTab(SHEET_CONFIG.tabs.solutions);
             if (solRows && solRows.length > 0 && solRows[0].Title) {
                 renderSolutions(solRows);
-                syncedCount++;
             }
 
             const pubRows = await fetchSheetTab(SHEET_CONFIG.tabs.publications);
             if (pubRows && pubRows.length > 0 && pubRows[0].Title) {
                 renderPublications(pubRows);
-                syncedCount++;
             }
 
             const patRows = await fetchSheetTab(SHEET_CONFIG.tabs.patents);
             if (patRows && patRows.length > 0 && patRows[0].Title) {
                 renderPatents(patRows);
-                syncedCount++;
             }
 
             const careerRows = await fetchSheetTab(SHEET_CONFIG.tabs.careers);
             if (careerRows && careerRows.length > 0 && careerRows[0].Role_Title) {
                 renderCareers(careerRows);
-                syncedCount++;
             }
 
             const eventRows = await fetchSheetTab(SHEET_CONFIG.tabs.events);
             if (eventRows && eventRows.length > 0 && eventRows[0].Event_Name) {
                 renderEvents(eventRows);
-                syncedCount++;
             } else if (eventRows !== null) {
                 // Tab exists in Google Sheet and is currently empty
                 renderEvents([]);
-                syncedCount++;
             }
 
             const newsRows = await fetchSheetTab(SHEET_CONFIG.tabs.news);
             if (newsRows && newsRows.length > 0 && newsRows[0].Headline) {
                 renderNews(newsRows);
-                syncedCount++;
             } else if (newsRows !== null) {
                 // Tab exists in Google Sheet and is currently empty
                 renderNews([]);
-                syncedCount++;
-            }
-
-            if (syncedCount > 0) {
-                dot.className = 'w-2 h-2 rounded-full bg-brandGreen';
-                statusText.textContent = `Google Sheet Live (${syncedCount} tab${syncedCount > 1 ? 's' : ''} synced)`;
-            } else {
-                dot.className = 'w-2 h-2 rounded-full bg-amber-500';
-                statusText.textContent = 'Sheet Connected (Add Tab Names)';
             }
         }
 
