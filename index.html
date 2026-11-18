@@ -52,6 +52,14 @@
             background-position: 0 0, 15px 15px;
             color: #1C1917;
         }
+        /* Smoothly reveal content only after Google Sheets finishes loading */
+  main, footer {
+    transition: opacity 0.25s ease-in;
+  }
+  body.syncing-sheets main,
+  body.syncing-sheets footer {
+    opacity: 0;
+  }
 
         /* Hand-sketched border and hard-ink drop shadow */
         .sketch-box {
@@ -103,7 +111,7 @@
         }
     </style>
 </head>
-<body class="selection:bg-amber-200 selection:text-ink font-sans text-ink">
+<body class="syncing-sheets selection:bg-amber-200 selection:text-ink font-sans text-ink">
 
     <!-- Top Brand Ribbon -->
     <div class="border-b-2 border-ink bg-amber-100/85 px-4 py-1.5 text-xs sm:text-sm font-hand">
@@ -1431,8 +1439,20 @@
         function closeCmsModal() {
             document.getElementById('cms-modal').classList.add('hidden');
         }
+        function revealSyncedContent() {
+      document.body.classList.remove('syncing-sheets');
+    }
 
-        window.addEventListener('DOMContentLoaded', syncAllTabs);
+    window.addEventListener('DOMContentLoaded', async function () {
+      try {
+        await syncAllTabs();
+      } finally {
+        revealSyncedContent();
+      }
+    });
+
+    // Safety fallback so the page always appears even on very slow connections
+    setTimeout(revealSyncedContent, 2500);
     </script>
 </body>
 </html>
